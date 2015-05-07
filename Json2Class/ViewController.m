@@ -139,6 +139,11 @@
     NSData *hData = [hClassInfo dataContent];
     NSData *mData = [mClassInfo dataContent];
     
+    if (!_path) {
+        NSString*bundel=[[NSBundle mainBundle] resourcePath];
+        NSString*deskTopLocation=[[bundel substringToIndex:[bundel rangeOfString:@"Library"].location] stringByAppendingFormat:@"Desktop"];
+        _path = deskTopLocation;
+    }
     NSString *hPath = [_path stringByAppendingPathComponent:hClassInfo.fileName];
     NSString *mPath = [_path stringByAppendingPathComponent:mClassInfo.fileName];
     
