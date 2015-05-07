@@ -126,7 +126,10 @@
             if (array.count > 0) {
                 if ([array[0] isKindOfClass:[NSDictionary class]]) {
                     char p = [key characterAtIndex:0];
-                    char P = p - 32;
+                    char P = p;
+                    if (p >= 97) {
+                        P = p - 32;
+                    }
                     NSString *largeKey = [key stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%c",p] withString:[NSString stringWithFormat:@"%c",P] options:0 range:NSMakeRange(0, 1)];
                     largeKey =  [NSString stringWithFormat:@"%@%@",className,largeKey];
                     [self createModelWithDictionary:array[0] name:largeKey];
@@ -137,8 +140,10 @@
         else if([value isKindOfClass:[NSDictionary class]])
         {
             char p = [key characterAtIndex:0];
-            char P = p - 32;
-
+            char P = p;
+            if (p >= 97) {
+                P = p - 32;
+            }
             NSString *largeKey = [key stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%c",p] withString:[NSString stringWithFormat:@"%c",P] options:0 range:NSMakeRange(0, 1)];
             largeKey =  [NSString stringWithFormat:@"%@%@",className,largeKey];
             [hClassInfo.propertyStr appendFormat:@"@property (nonatomic,strong) %@ *%@;\n",largeKey,key];
