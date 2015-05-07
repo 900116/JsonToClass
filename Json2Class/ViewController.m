@@ -17,6 +17,7 @@
 @property(nonatomic,copy) NSString *name;
 @property(nonatomic,copy) NSString *fileName;
 @property(nonatomic,strong) NSMutableString *propertyStr;
+@property(nonatomic,strong) NSMutableString *methodStr;
 +(instancetype)objWithType:(BOOL)HorM name:(NSString *)name;
 @end
 
@@ -29,12 +30,15 @@
         info.fileName = [name stringByAppendingString:@".h"];
         info.importStr = [NSMutableString stringWithFormat:@"\n#import <Foundation/Foundation.h>"];
         info.define = [NSMutableString stringWithFormat:@"\n@interface %@:NSObject\n",name];
+        info.methodStr = [NSMutableString string];
     }
     else
     {
         info.fileName = [name stringByAppendingString:@".m"];
         info.importStr = [NSMutableString stringWithFormat:@"\n#import \"%@.h\"",name];
         info.define = [NSMutableString stringWithFormat:@"\n@implementation %@\n",name];
+        info.methodStr = [NSMutableString stringWithFormat:@"\n-(instancetype)init{\n"];
+        [info.methodStr appendString:@"\tself = [super init];\n\tif(self){\n\n\t}\n\treturn self;\n}\n"];
     }
     
     info.headStr = [NSMutableString stringWithFormat:@"//\n//%@ \n//\n//\n//Create by ",info.fileName];
@@ -54,7 +58,7 @@
 
 -(NSData *)dataContent
 {
-    NSString *string = [NSString stringWithFormat:@"%@%@%@%@\n@end",_headStr,_importStr,_define,_propertyStr];
+    NSString *string = [NSString stringWithFormat:@"%@%@%@%@%@\n@end",_headStr,_importStr,_define,_methodStr,_propertyStr];
     NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
     return data;
 }
@@ -90,6 +94,11 @@
 {
     ClassStringInfo *hClassInfo = [ClassStringInfo objWithType:YES name:className];
     ClassStringInfo *mClassInfo = [ClassStringInfo objWithType:NO name:className];
+    
+    NSMutableString *descrptionHead = [NSMutableString stringWithFormat:@"\n-(NSString *)description{\n\treturn [NSString stringWithFormat:@\"{"];
+    NSMutableString *descrptionTail = [NSMutableString stringWithFormat:@""];
+    NSString *formatKey;
+    
     NSArray *allKeys = [dict allKeys];
     for (NSString *key in allKeys) {
         id  value = [dict objectForKey:key];
@@ -99,15 +108,18 @@
             if (fValue == (int)fValue) {
                 //整形
                 [hClassInfo.propertyStr  appendFormat:@"@property (nonatomic,assign) NSInteger %@;\n",key];
+                formatKey = @"%ld";
             }
             else
             {
                 [hClassInfo.propertyStr  appendFormat:@"@property (nonatomic,assign) CGFloat %@;\n",key];
+                formatKey = @"%lf";
             }
         }
         else if([value isKindOfClass:[NSString class]])
         {
             [hClassInfo.propertyStr appendFormat:@"@property (nonatomic,copy) NSString *%@;\n",key];
+            formatKey = @"%@";
         }
         else if([value isKindOfClass:[NSArray class]])
         {
@@ -122,6 +134,7 @@
                     [self createModelWithDictionary:array[0] name:largeKey];
                 }
             }
+            formatKey = @"%@";
         }
         else if([value isKindOfClass:[NSDictionary class]])
         {
@@ -133,9 +146,19 @@
             [hClassInfo.propertyStr appendFormat:@"@property (nonatomic,strong) %@ *%@;\n",largeKey,key];
             [hClassInfo.importStr appendFormat:@"\n#import \"%@.h\"",largeKey];
             [self createModelWithDictionary:value name:largeKey];
+            formatKey = @"%@";
+        }
+        [descrptionHead appendFormat:@"%@:%@",key,formatKey];
+        [descrptionTail appendFormat:@"_%@",key];
+        if ([allKeys indexOfObject:key]!=allKeys.count-1) {
+            [descrptionHead appendFormat:@","];
+            [descrptionTail appendFormat:@","];
         }
     }
-
+    [descrptionHead appendFormat:@"}\","];
+    [descrptionTail appendFormat:@"];\n}"];
+    [mClassInfo.methodStr appendFormat:@"%@%@",descrptionHead,descrptionTail];
+    
     NSData *hData = [hClassInfo dataContent];
     NSData *mData = [mClassInfo dataContent];
     
