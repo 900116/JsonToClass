@@ -104,13 +104,12 @@
         id  value = [dict objectForKey:key];
         if ([value isKindOfClass:[NSNumber class]]) {
             NSNumber *nValue = value;
-            CGFloat fValue = nValue.doubleValue;
-            if (fValue == (int)fValue) {
+            if (strcmp([nValue objCType], @encode(int)) == 0||strcmp([nValue objCType], @encode(long)) == 0) {
                 //整形
                 [hClassInfo.propertyStr  appendFormat:@"@property (nonatomic,assign) NSInteger %@;\n",key];
                 formatKey = @"%ld";
             }
-            else
+            else if (strcmp([nValue objCType], @encode(float)) == 0 || strcmp([nValue objCType], @encode(double)) == 0 )
             {
                 [hClassInfo.propertyStr  appendFormat:@"@property (nonatomic,assign) CGFloat %@;\n",key];
                 formatKey = @"%lf";
