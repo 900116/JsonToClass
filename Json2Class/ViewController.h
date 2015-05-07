@@ -10,7 +10,7 @@
 
 @interface ViewController : NSViewController
 @property(nonatomic,strong) IBOutlet NSTextView *jsonTF;
-@property (weak) IBOutlet NSTextField *nameTF;
+@property (nonatomic,weak) IBOutlet NSTextField *nameTF;
 -(IBAction)generate:(id)sender;
 -(IBAction)OpenFileDialog:(id)sender;
 @end

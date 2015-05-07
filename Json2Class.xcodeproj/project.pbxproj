@@ -13,6 +13,7 @@
 		ECB16EA11AFB0A2100FB6093 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ECB16EA01AFB0A2100FB6093 /* Images.xcassets */; };
 		ECB16EA41AFB0A2100FB6093 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ECB16EA21AFB0A2100FB6093 /* Main.storyboard */; };
 		ECB16EB01AFB0A2100FB6093 /* Json2ClassTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ECB16EAF1AFB0A2100FB6093 /* Json2ClassTests.m */; };
+		ECB16EC91AFB8A8A00FB6093 /* JCTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = ECB16EC81AFB8A8A00FB6093 /* JCTextView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,8 @@
 		ECB16EA91AFB0A2100FB6093 /* Json2ClassTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Json2ClassTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECB16EAE1AFB0A2100FB6093 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ECB16EAF1AFB0A2100FB6093 /* Json2ClassTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Json2ClassTests.m; sourceTree = "<group>"; };
+		ECB16EC71AFB8A8A00FB6093 /* JCTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JCTextView.h; sourceTree = "<group>"; };
+		ECB16EC81AFB8A8A00FB6093 /* JCTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JCTextView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +82,8 @@
 		ECB16E951AFB0A2100FB6093 /* Json2Class */ = {
 			isa = PBXGroup;
 			children = (
+				ECB16EC71AFB8A8A00FB6093 /* JCTextView.h */,
+				ECB16EC81AFB8A8A00FB6093 /* JCTextView.m */,
 				ECB16E981AFB0A2100FB6093 /* AppDelegate.h */,
 				ECB16E991AFB0A2100FB6093 /* AppDelegate.m */,
 				ECB16E9D1AFB0A2100FB6093 /* ViewController.h */,
@@ -215,6 +220,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ECB16EC91AFB8A8A00FB6093 /* JCTextView.m in Sources */,
 				ECB16E9F1AFB0A2100FB6093 /* ViewController.m in Sources */,
 				ECB16E9C1AFB0A2100FB6093 /* main.m in Sources */,
 				ECB16E9A1AFB0A2100FB6093 /* AppDelegate.m in Sources */,
@@ -404,6 +410,7 @@
 				ECB16EB51AFB0A2100FB6093 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		ECB16EB61AFB0A2100FB6093 /* Build configuration list for PBXNativeTarget "Json2ClassTests" */ = {
 			isa = XCConfigurationList;
@@ -412,6 +419,7 @@
 				ECB16EB81AFB0A2100FB6093 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
