@@ -22,14 +22,15 @@
 @end
 
 @implementation ClassStringInfo
+
 +(instancetype)objWithType:(BOOL)HorM name:(NSString *)name
 {
     ClassStringInfo *info = [[ClassStringInfo alloc]init];
     info.name = name;
     if (HorM) {
         info.fileName = [name stringByAppendingString:@".h"];
-        info.importStr = [NSMutableString stringWithFormat:@"\n#import <Foundation/Foundation.h>"];
-        info.define = [NSMutableString stringWithFormat:@"\n@interface %@:NSObject\n",name];
+        info.importStr = [NSMutableString stringWithFormat:@"\n#import <Foundation/Foundation.h>\n#import <UIKit/UIKit.h>"];
+        info.define = [NSMutableString stringWithFormat:@"\n@interface %@:NSObject<NSCoding>\n",name];
         info.methodStr = [NSMutableString string];
     }
     else
@@ -94,12 +95,19 @@
     ClassStringInfo *hClassInfo = [ClassStringInfo objWithType:YES name:className];
     ClassStringInfo *mClassInfo = [ClassStringInfo objWithType:NO name:className];
     
+    NSMutableString *decodeStr = [NSMutableString stringWithFormat:@"\n-(instancetype)initWithCoder:(NSCoder *)aDecoder\n{\n"];
+    [decodeStr appendString:@"\tself = [super init];\n\tif(self){"];
+    NSMutableString *encodeStr = [NSMutableString stringWithFormat:@"\n-(void)encodeWithCoder:(NSCoder *)aCoder\n{"];
+    
     NSMutableString *descrptionHead = [NSMutableString stringWithFormat:@"\n-(NSString *)description{\n\treturn [NSString stringWithFormat:@\"{"];
     NSMutableString *descrptionTail = [NSMutableString stringWithFormat:@""];
-    NSString *formatKey;
+    NSString *formatKey = nil;
     
     NSArray *allKeys = [dict allKeys];
     for (NSString *key in allKeys) {
+        NSString *decodeMethod = nil;
+        NSString *encodeMethod = nil;
+        
         id  value = [dict objectForKey:key];
         if ([value isKindOfClass:[NSNumber class]]) {
             NSNumber *nValue = value;
@@ -107,17 +115,30 @@
                 //整形
                 [hClassInfo.propertyStr  appendFormat:@"@property (nonatomic,assign) NSInteger %@;\n",key];
                 formatKey = @"%ld";
+                decodeMethod = @"decodeIntegerForKey:";
+                encodeMethod = @"encodeInteger:";
             }
-            else if (strcmp([nValue objCType], @encode(float)) == 0 || strcmp([nValue objCType], @encode(double)) == 0 )
+            else if (strcmp([nValue objCType], @encode(float)) == 0)
             {
                 [hClassInfo.propertyStr  appendFormat:@"@property (nonatomic,assign) CGFloat %@;\n",key];
                 formatKey = @"%lf";
+                decodeMethod = @"decodeFloatForKey:";
+                encodeMethod = @"encodeFloat:";
+            }
+            else if (strcmp([nValue objCType], @encode(double)) == 0 )
+            {
+                [hClassInfo.propertyStr  appendFormat:@"@property (nonatomic,assign) CGFloat %@;\n",key];
+                formatKey = @"%lf";
+                decodeMethod = @"decodeDoubleForKey:";
+                encodeMethod = @"encodeDouble:";
             }
         }
         else if([value isKindOfClass:[NSString class]])
         {
             [hClassInfo.propertyStr appendFormat:@"@property (nonatomic,copy) NSString *%@;\n",key];
             formatKey = @"%@";
+            decodeMethod = @"decodeObjectForKey:";
+            encodeMethod = @"encodeObject:";
         }
         else if([value isKindOfClass:[NSArray class]])
         {
@@ -136,6 +157,8 @@
                 }
             }
             formatKey = @"%@";
+            decodeMethod = @"decodeObjectForKey:";
+            encodeMethod = @"encodeObject:";
         }
         else if([value isKindOfClass:[NSDictionary class]])
         {
@@ -150,16 +173,26 @@
             [hClassInfo.importStr appendFormat:@"\n#import \"%@.h\"",largeKey];
             [self createModelWithDictionary:value name:largeKey];
             formatKey = @"%@";
+            decodeMethod = @"decodeObjectForKey:";
+            encodeMethod = @"encodeObject:";
         }
         [descrptionHead appendFormat:@"%@:%@",key,formatKey];
         [descrptionTail appendFormat:@"_%@",key];
+        [decodeStr appendFormat:@"\n\t\tself.%@ = [aDecoder %@@\"%@\"];",key,decodeMethod,key];
+        [encodeStr appendFormat:@"\n\t[aCoder %@_%@ forKey:@\"%@\"];",encodeMethod,key,key];
         if ([allKeys indexOfObject:key]!=allKeys.count-1) {
             [descrptionHead appendFormat:@","];
             [descrptionTail appendFormat:@","];
         }
     }
+    [encodeStr appendFormat:@"\n}\n"];
+    
+    [decodeStr appendFormat:@"\n\t}\n\treturn self;\n}\n"];
     [descrptionHead appendFormat:@"}\","];
     [descrptionTail appendFormat:@"];\n}"];
+    
+    [mClassInfo.methodStr appendString:decodeStr];
+    [mClassInfo.methodStr appendString:encodeStr];
     [mClassInfo.methodStr appendFormat:@"%@%@",descrptionHead,descrptionTail];
     
     NSData *hData = [hClassInfo dataContent];
