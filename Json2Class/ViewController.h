@@ -13,6 +13,7 @@
 @property (nonatomic,weak) IBOutlet NSTextField *nameTF;
 @property (weak) IBOutlet NSSegmentedControl *descrptionSeg;
 @property (weak) IBOutlet NSSegmentedControl *codingSeg;
+@property (weak) IBOutlet NSSegmentedControl *mjArraySeg;
 
 -(IBAction)generate:(id)sender;
 -(IBAction)OpenFileDialog:(id)sender;

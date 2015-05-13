@@ -213,7 +213,9 @@ typedef NS_ENUM(int, PropertyType)
     
     NSMutableString *descrptionHead = [NSMutableString stringWithFormat:@"\n-(NSString *)description{\n\treturn [NSString stringWithFormat:@\"{"];
     NSMutableString *descrptionTail = [NSMutableString stringWithFormat:@""];
-
+    
+    NSMutableString *mjArrayStr = nil;
+    
     NSArray *allKeys = [dict allKeys];
     for (NSString *key in allKeys) {
         id  value = [dict objectForKey:key];
@@ -244,6 +246,12 @@ typedef NS_ENUM(int, PropertyType)
                 if ([array[0] isKindOfClass:[NSDictionary class]]) {
                     NSString *largeKey = [self lagerKeyWithKey:key className:className];
                     [self createModelWithDictionary:array[0] name:largeKey];
+                    if (!mjArrayStr) {
+                        mjArrayStr = [NSMutableString stringWithFormat:@"\n+(NSDictionary *)objectClassInArray\n{\n\treturn @{"];
+                    }
+                    if ([mjArrayStr rangeOfString:key].location == NSNotFound) {
+                        [mjArrayStr appendFormat:@"@\"%@\":@\"%@\",",key,largeKey];
+                    }
                 }
             }
             [inf setType:PropertyTypeArray key:key];
@@ -253,7 +261,6 @@ typedef NS_ENUM(int, PropertyType)
             NSString *largeKey = [self lagerKeyWithKey:key className:className];
             [hClassInfo.importStr appendFormat:@"\n#import \"%@.h\"",largeKey];
             [self createModelWithDictionary:value name:largeKey];
-
             [inf setType:PropertyTypeDictionary key:key];
         }
         [hClassInfo.propertyStr  appendString:inf.propertyStr];
@@ -273,7 +280,10 @@ typedef NS_ENUM(int, PropertyType)
     [decodeStr appendFormat:@"\n\t}\n\treturn self;\n}\n"];
     
     [descrptionHead appendFormat:@"}\","];
-    [descrptionTail appendFormat:@"];\n}"];
+    [descrptionTail appendFormat:@"];\n}\n"];
+    
+    [mjArrayStr deleteCharactersInRange:NSMakeRange(mjArrayStr.length-1, 1)];
+    [mjArrayStr appendString:@"};\n}\n"];
     
     //coding
     if (_codingSeg.selectedSegment == 0) {
@@ -284,6 +294,13 @@ typedef NS_ENUM(int, PropertyType)
     //descprtoins
     if ([_descrptionSeg selectedSegment] == 0) {
         [mClassInfo.methodStr appendFormat:@"%@%@",descrptionHead,descrptionTail];
+    }
+    
+    //mjArray
+    if (_mjArraySeg.selectedSegment == 0) {
+        if (mjArrayStr) {
+            [mClassInfo.methodStr appendString:mjArrayStr];
+        }
     }
     
     [hClassInfo saveWithPath:_path];

@@ -761,7 +761,7 @@
                                 </segmentedCell>
                             </segmentedControl>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="699-Cl-Wim">
-                                <rect key="frame" x="463" y="184" width="113" height="17"/>
+                                <rect key="frame" x="463" y="184" width="53" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Coding:" id="xUo-NH-Smv">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -778,6 +778,24 @@
                                     <action selector="OpenFileDialog:" target="XfG-lQ-9wD" id="eVc-GE-PsG"/>
                                 </connections>
                             </button>
+                            <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="68q-nX-VKz">
+                                <rect key="frame" x="463" y="96" width="110" height="24"/>
+                                <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="efm-3l-atu">
+                                    <font key="font" metaFont="system"/>
+                                    <segments>
+                                        <segment label="YES" width="52"/>
+                                        <segment label="NO" width="51" selected="YES" tag="1"/>
+                                    </segments>
+                                </segmentedCell>
+                            </segmentedControl>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RxR-E7-iPH">
+                                <rect key="frame" x="463" y="125" width="60" height="17"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="MJArray:" id="106-bO-bmj">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="AhN-QF-Xoq" firstAttribute="top" secondItem="699-Cl-Wim" secondAttribute="bottom" constant="6" id="2IS-1Q-L8E"/>
@@ -794,26 +812,29 @@
                             <constraint firstItem="wfv-5J-cg4" firstAttribute="top" relation="greaterThanOrEqual" secondItem="AhN-QF-Xoq" secondAttribute="bottom" constant="86" id="JHa-eB-6qW"/>
                             <constraint firstItem="azc-Cx-Sy5" firstAttribute="leading" secondItem="I9S-gE-KtI" secondAttribute="trailing" constant="10" id="JTB-Wx-SY2"/>
                             <constraint firstItem="GuP-e8-gch" firstAttribute="centerX" secondItem="AhN-QF-Xoq" secondAttribute="centerX" id="L1B-cL-zZa"/>
+                            <constraint firstItem="RxR-E7-iPH" firstAttribute="top" secondItem="AhN-QF-Xoq" secondAttribute="bottom" constant="15" id="Ss6-Vl-8pD"/>
+                            <constraint firstItem="RxR-E7-iPH" firstAttribute="leading" secondItem="699-Cl-Wim" secondAttribute="leading" id="V6e-Af-6rO"/>
                             <constraint firstItem="ss8-Zu-7hB" firstAttribute="top" secondItem="wfv-5J-cg4" secondAttribute="bottom" constant="8" id="X31-5P-clb"/>
                             <constraint firstItem="AhN-QF-Xoq" firstAttribute="centerX" secondItem="ss8-Zu-7hB" secondAttribute="centerX" id="aFc-db-mWR"/>
                             <constraint firstAttribute="bottom" secondItem="HfB-AS-5J7" secondAttribute="bottom" constant="27" id="aRl-PO-gqn"/>
+                            <constraint firstItem="68q-nX-VKz" firstAttribute="centerX" secondItem="AhN-QF-Xoq" secondAttribute="centerX" id="bAA-40-t7f"/>
                             <constraint firstItem="I9S-gE-KtI" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="29" id="bJa-B8-BR5"/>
+                            <constraint firstItem="68q-nX-VKz" firstAttribute="top" secondItem="RxR-E7-iPH" secondAttribute="bottom" constant="6" id="cRP-Gb-JXh"/>
                             <constraint firstItem="azc-Cx-Sy5" firstAttribute="top" secondItem="I9S-gE-KtI" secondAttribute="top" id="dR4-4h-Qjn"/>
                             <constraint firstItem="HfB-AS-5J7" firstAttribute="centerY" secondItem="ss8-Zu-7hB" secondAttribute="centerY" constant="-2" id="f8O-tw-tdL"/>
                             <constraint firstItem="GuP-e8-gch" firstAttribute="centerX" secondItem="AhN-QF-Xoq" secondAttribute="centerX" id="jNo-Fs-z1B"/>
                             <constraint firstItem="GuP-e8-gch" firstAttribute="leading" secondItem="AhN-QF-Xoq" secondAttribute="leading" id="lkR-zx-uxm"/>
-                            <constraint firstItem="GuP-e8-gch" firstAttribute="centerX" secondItem="699-Cl-Wim" secondAttribute="centerX" constant="-1" id="nFB-cL-WFH"/>
                             <constraint firstItem="GuP-e8-gch" firstAttribute="leading" secondItem="I9S-gE-KtI" secondAttribute="trailing" constant="8" id="nQM-Ox-qnD"/>
                             <constraint firstItem="wfv-5J-cg4" firstAttribute="centerX" secondItem="ss8-Zu-7hB" secondAttribute="centerX" id="rZ6-nL-jqB"/>
                             <constraint firstAttribute="trailing" secondItem="GuP-e8-gch" secondAttribute="trailing" constant="20" id="tSC-55-hHU"/>
                             <constraint firstItem="699-Cl-Wim" firstAttribute="top" secondItem="GuP-e8-gch" secondAttribute="bottom" constant="14" id="u9L-Gc-Mdd"/>
-                            <constraint firstItem="699-Cl-Wim" firstAttribute="centerX" secondItem="AhN-QF-Xoq" secondAttribute="centerX" constant="1" id="xgB-6c-ZWs"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="codingSeg" destination="AhN-QF-Xoq" id="qNd-fa-dqd"/>
                         <outlet property="descrptionSeg" destination="GuP-e8-gch" id="BZF-Qy-jkg"/>
                         <outlet property="jsonTF" destination="P5K-v5-Wy3" id="gwq-NB-kGi"/>
+                        <outlet property="mjArraySeg" destination="68q-nX-VKz" id="VoW-6u-prJ"/>
                         <outlet property="nameTF" destination="HfB-AS-5J7" id="yXj-88-SoJ"/>
                     </connections>
                 </viewController>
