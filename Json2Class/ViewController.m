@@ -99,6 +99,25 @@ typedef NS_ENUM(int, PropertyType)
 @end
 
 @implementation PropertyInfo
+-(void)setPropertyWithClassName:(NSString *)className key:(NSString *)key
+{
+    NSString * propertyStr = [NSString stringWithFormat:@"@property (nonatomic,copy) %@ *%@;\n",className,key];
+    NSString * formatKey = @"%@";
+    NSString * decodeMethod = @"decodeObjectForKey:";
+    NSString * encodeMethod = @"encodeObject:";
+    
+    NSString *desHead = [NSString stringWithFormat:@"%@:%@",key,formatKey];
+    NSString *desTail = [NSString stringWithFormat:@"_%@",key];
+    NSString *decodeStr = [NSString stringWithFormat:@"\n\t\tself.%@ = [aDecoder %@@\"%@\"];",key,decodeMethod,key];
+    NSString *encodeStr = [NSString stringWithFormat:@"\n\t[aCoder %@_%@ forKey:@\"%@\"];",encodeMethod,key,key];
+    
+    self.descriptionHead = desHead;
+    self.descriptionTail = desTail;
+    self.decodeStr = decodeStr;
+    self.encodeStr = encodeStr;
+    self.propertyStr = propertyStr;
+}
+
 -(void)setType:(PropertyType)type key:(NSString *)key
 {
     NSString *propertyStr = nil;
@@ -142,10 +161,6 @@ typedef NS_ENUM(int, PropertyType)
             break;
         }
         case PropertyTypeDictionary: {
-            propertyStr = [NSString stringWithFormat:@"@property (nonatomic,copy) NSDictionary *%@;\n",key];
-            formatKey = @"%@";
-            decodeMethod = @"decodeObjectForKey:";
-            encodeMethod = @"encodeObject:";
             break;
         }
         default: {
@@ -261,7 +276,7 @@ typedef NS_ENUM(int, PropertyType)
             NSString *largeKey = [self lagerKeyWithKey:key className:className];
             [hClassInfo.importStr appendFormat:@"\n#import \"%@.h\"",largeKey];
             [self createModelWithDictionary:value name:largeKey];
-            [inf setType:PropertyTypeDictionary key:key];
+            [inf setPropertyWithClassName:largeKey key:key];
         }
         [hClassInfo.propertyStr  appendString:inf.propertyStr];
         
