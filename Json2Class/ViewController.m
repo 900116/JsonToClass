@@ -101,7 +101,7 @@ typedef NS_ENUM(int, PropertyType)
 @implementation PropertyInfo
 -(void)setPropertyWithClassName:(NSString *)className key:(NSString *)key
 {
-    NSString * propertyStr = [NSString stringWithFormat:@"@property (nonatomic,copy) %@ *%@;\n",className,key];
+    NSString * propertyStr = [NSString stringWithFormat:@"@property (nonatomic,strong) %@ *%@;\n",className,key];
     NSString * formatKey = @"%@";
     NSString * decodeMethod = @"decodeObjectForKey:";
     NSString * encodeMethod = @"encodeObject:";
