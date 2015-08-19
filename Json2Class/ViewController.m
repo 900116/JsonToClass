@@ -235,7 +235,10 @@ typedef NS_ENUM(int, PropertyType)
     for (NSString *key in allKeys) {
         id  value = [dict objectForKey:key];
         PropertyInfo *inf = [[PropertyInfo alloc]init];
-        if ([value isKindOfClass:[NSNumber class]]) {
+        if ([value isKindOfClass:[NSNull class]]) {
+            [inf setType:PropertyTypeString key:key];
+        }
+        else if ([value isKindOfClass:[NSNumber class]]) {
             NSNumber *nValue = value;
             if (strcmp([nValue objCType], @encode(int)) == 0||strcmp([nValue objCType], @encode(long)) == 0) {
                 //整形
