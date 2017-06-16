@@ -10,6 +10,20 @@
 #import <CoreGraphics/CoreGraphics.h>
 #import <unistd.h>
 
+
+@interface NSMutableString (Safe)
+-(void)appendStringSafe:(NSString *)aString;
+@end
+
+@implementation NSMutableString (Safe)
+-(void)appendStringSafe:(NSString *)aString
+{
+    if (aString) {
+        [self appendString:aString];
+    }
+}
+@end
+
 @interface ClassStringInfo : NSObject
 @property(nonatomic,strong) NSMutableString *headStr;
 @property(nonatomic,strong) NSMutableString *importStr;
@@ -48,9 +62,9 @@
     NSString *dateStr = [formatter stringFromDate:[NSDate new]];
     
     NSString *cpy = [NSString stringWithFormat:@"%@ on %@ \n//Copyright (c)",userName,dateStr];
-    [info.headStr appendString:cpy];
+    [info.headStr appendStringSafe:cpy];
     formatter.dateFormat = @"yyyy年";
-    [info.headStr appendString:[NSString stringWithFormat:@" %@ %@. All rights reserved.\n//\n//",[formatter stringFromDate:[NSDate new]],userName]];
+    [info.headStr appendStringSafe:[NSString stringWithFormat:@" %@ %@. All rights reserved.\n//\n//",[formatter stringFromDate:[NSDate new]],userName]];
     
     info.propertyStr = [NSMutableString new];
     return info;
@@ -223,7 +237,7 @@ typedef NS_ENUM(int, PropertyType)
     ClassStringInfo *mClassInfo = [ClassStringInfo objWithType:NO name:className coding:_codingSeg.selectedSegment == 0];
     
     NSMutableString *decodeStr = [NSMutableString stringWithFormat:@"\n-(instancetype)initWithCoder:(NSCoder *)aDecoder\n{\n"];
-    [decodeStr appendString:@"\tself = [super init];\n\tif(self){"];
+    [decodeStr appendStringSafe:@"\tself = [super init];\n\tif(self){"];
     NSMutableString *encodeStr = [NSMutableString stringWithFormat:@"\n-(void)encodeWithCoder:(NSCoder *)aCoder\n{"];
     
     NSMutableString *descrptionHead = [NSMutableString stringWithFormat:@"\n-(NSString *)description{\n\treturn [NSString stringWithFormat:@\"{"];
@@ -281,13 +295,13 @@ typedef NS_ENUM(int, PropertyType)
             [self createModelWithDictionary:value name:largeKey];
             [inf setPropertyWithClassName:largeKey key:key];
         }
-        [hClassInfo.propertyStr  appendString:inf.propertyStr];
+        [hClassInfo.propertyStr  appendStringSafe:inf.propertyStr];
         
-        [descrptionHead appendString:inf.descriptionHead];
-        [descrptionTail appendString:inf.descriptionTail];
+        [descrptionHead appendStringSafe:inf.descriptionHead];
+        [descrptionTail appendStringSafe:inf.descriptionTail];
         
-        [decodeStr appendString:inf.decodeStr];
-        [encodeStr appendString:inf.encodeStr];
+        [decodeStr appendStringSafe:inf.decodeStr];
+        [encodeStr appendStringSafe:inf.encodeStr];
         if ([allKeys indexOfObject:key]!=allKeys.count-1) {
             [descrptionHead appendFormat:@","];
             [descrptionTail appendFormat:@","];
@@ -305,8 +319,8 @@ typedef NS_ENUM(int, PropertyType)
     
     //coding
     if (_codingSeg.selectedSegment == 0) {
-        [mClassInfo.methodStr appendString:decodeStr];
-        [mClassInfo.methodStr appendString:encodeStr];
+        [mClassInfo.methodStr appendStringSafe:decodeStr];
+        [mClassInfo.methodStr appendStringSafe:encodeStr];
     }
     
     //descprtoins
@@ -317,7 +331,7 @@ typedef NS_ENUM(int, PropertyType)
     //mjArray
     if (_mjArraySeg.selectedSegment == 0) {
         if (mjArrayStr) {
-            [mClassInfo.methodStr appendString:mjArrayStr];
+            [mClassInfo.methodStr appendStringSafe:mjArrayStr];
         }
     }
     
